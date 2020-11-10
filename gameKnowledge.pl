@@ -17,29 +17,7 @@ color(violet, X):-
         X is 0.
 
 getColor(Card, Color):-
-        (
-        Card >= 42 ->
-        color(red, Color)
-        ;
-        42 < Card <= 35 ->
-        color(orange, Color)
-        ;
-        35 < Card <= 28 ->
-        color(yellow, Color)
-        ;
-        28 < Card <= 21 ->
-        color(green, Color)
-        ;
-        21 < Card <= 14 ->
-        color(lBlue, Color)
-        ;
-        14 < Card <= 7 ->
-        color(purple, Color)
-        ;      
-        Card <= 7 ->
-        color(violet, Color)
-        ;  
-        ).   
+        Color is ceil(Card / 7).  
 
 getCardNumber(Card, Number):- 
         Result is Card - (7 * floor(Card /  7)),
