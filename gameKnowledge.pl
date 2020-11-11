@@ -1,6 +1,9 @@
 %To load a external file
 %:- ensure_load(fileName).
 
+%prevent warning
+:-discontiguous rule/3.
+
 color(red, X):-
 	X is 6.
 color(orange, X):-
@@ -29,19 +32,46 @@ getCardNumber(Card, Number):-
         ).
 
 %to make the deck we must create a vector and shuffle it and get the first 14 elements
-createDeck(Deck).
+createDeck(_).
 
 %defining the rules
 
-%number of pair cards rule
-rule(pairRule, [], Score).
-
-rule(pairRule, [Head|Tail], Score):- 
-	isPair(Head, Result),
-       	Sum is 1 - Result,
-        Total  is Score + Sum,
-        rule(pairRule, Tail, Total).	
-        
+%rule to check if number is pair
 isPair(Number, Result):- 
         Result is Number - (2 * floor(Number /  2)).
 
+countPairs([], Total, Total).
+
+countPairs([Head|Tail], Total, Score):-
+        isPair(Head, Result),
+        Total2 is Total + (1 - Result),
+        countPairs(Tail, Total2, Score).
+
+%rules to check the number of times that a element appears in a list
+ocurrence(List, Element, Count) :-
+        aggregate(count, member(Element,List), Count).
+
+lowerThanFour([], Total, Total).
+
+lowerThanFour([Head|Tail], Total, Score):-
+        ( 
+        Head < 4 ->
+        Total2 is Total + 1,
+        lowerThanFour(Tail, Total2, Score)
+        ;
+        lowerThanFour(Tail, Total, Score)
+        ).
+
+%number of pair cards rule
+rule(pairRule, List, Score):-
+        countPairs(List, 0, Score).
+
+rule(highestRule, List, Score):-
+        max_list(List, Score).
+
+rule(sameNumberRule, List, Element, Score):-
+        aggregate(max(Score1 ,Element1), ocurrence(List, Element1, Score1), max(Score,Element)).
+
+%Cards lower than 4 rule
+rule(below4Rule, List, Score):-
+        lowerThanFour(List, 0, Score).
