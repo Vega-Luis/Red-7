@@ -1,6 +1,3 @@
-%To load a external file
-%:- ensure_load(fileName).
-
 %prevent warning
 :-discontiguous rule/3.
 
