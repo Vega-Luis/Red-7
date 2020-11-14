@@ -75,3 +75,42 @@ rule(sameNumberRule, List, Element, Score):-
 %Cards lower than 4 rule
 rule(below4Rule, List, Score):-
         lowerThanFour(List, 0, Score).
+
+
+%transform a list of cards to a color list cards
+cardsToColors([], ColorList, ColorList).
+
+cardsToColors([Head|Tail], AuxList, ColorList):- 
+        getColor(Head,Color),
+        append(AuxList, [Color], Result),
+        cardsToColors(Tail, Result, ColorList).
+
+%Cards of the same color
+%Once the we have the card color numbers, we can reuse the sameNumberRule :D 
+
+%get the non repeated numbers in the list, 
+getSingles([], Result, Result).
+
+getSingles([Head|Tail], Aux, Result):- 
+        (
+        member(Head, Aux) ->
+        getSingles(Tail, Aux, Result)
+        ;
+        append(Aux, [Head], NewList),
+        getSingles(Tail, NewList, Result)
+        ).
+%Get the list length
+listLength([], 0).
+
+listLength([Head|Tail], Length):-
+        listLength(Tail, Sum),
+        Length is Sum+1.
+
+%Cards of diferent color
+rule(diferentColor, ColorList, Score):-
+        getSingles(ColorList, [], Singles),
+        listLength(Singles, Score).
+
+
+
+%cards that form a RUN(4 5 6 ... 12 3)
