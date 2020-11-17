@@ -96,18 +96,37 @@ getSingles([Head|Tail], Aux, Result):-
         append(Aux, [Head], NewList),
         getSingles(Tail, NewList, Result)
         ).
-%Get the list length
-listLength([], 0).
-
-listLength([Head|Tail], Length):-
-        listLength(Tail, Sum),
-        Length is Sum+1.
 
 %Cards of diferent color
 rule(diferentColor, ColorList, Score):-
         getSingles(ColorList, [], Singles),
-        listLength(Singles, Score).
-
-
+        length(Singles, Score).
 
 %cards that form a RUN(4 5 6 ... 12 3)
+%el numero de la carta, no la carta
+
+rule(run, Cards, Score):-
+        getSingles(Cards, [], Singles),
+        sort(Singles, Sorted),
+        countTheRun(Sorted, 1, [], Score).
+
+countTheRun([], Counter, ScoreList, Score):-
+        max_list(ScoreList, Score).
+
+countTheRun([Head|Tail], Counter, ScoreList, Score):-
+        countRun(Tail, Head, Counter, TempScore),
+        append(ScoreList, [TempScore], NewList),
+        countTheRun(Tail, Counter, NewList, Score).
+
+%    this works    
+countRun([], _Temp, Counter, Counter).
+
+countRun([Head|Tail], Temp, Counter, Output):-
+       N is Head-Temp,
+       (
+               N = 1 ->
+               Counter2 is Counter + 1,
+               countRun(Tail, Head, Counter2, Output)
+        ;
+               countRun(Tail, Temp, Counter, Output)
+       ).
