@@ -16,11 +16,14 @@ color(purple, X):-
 color(violet, X):-
         X is 0.
 
+mod(Number, Mod, Result):-
+        Result is Number - (Mod * floor(Number / Mod)).   
+
 getColor(Card, Color):-
         Color is ceil(Card / 7).  
 
 getCardNumber(Card, Number):- 
-        Result is Card - (7 * floor(Card /  7)),
+        mod(Card, 7, Result),
         (
         Result = 0 ->
         Number is 7
@@ -35,7 +38,7 @@ createDeck(_).
 
 %rule to check if number is pair
 isPair(Number, Result):- 
-        Result is Number - (2 * floor(Number /  2)).
+        mod(Number, 2, Result).
 
 countPairs([], Total, Total).
 
