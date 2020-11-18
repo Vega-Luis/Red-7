@@ -1,10 +1,5 @@
 :- ensure_loaded("gameKnowledge.pl").
 
-%generate the deck for the game, there is a total of 49 cards
-generateDeck(Deck):-
-    numlist(1,49,List),
-    random_permutation(List, Deck). %shuffle list
-
 getSublist([_|Tail], Result):-
     length(Tail, X),
     (
@@ -23,11 +18,15 @@ getCard([Head|Tail], Current, Index, Result):-
     getCard(Tail, Current2, Index, Result)    
     ).
 
+%generate the deck for the game, there is a total of 49 cards
+generateDeck(Deck):-
+    numlist(1,49,List),
+    random_permutation(List, Deck). %shuffle list
+
 %generate the deck for the players, each deck size is of 7 cards
 generateDeck(Player, IA):-
     generateDeck(Cards),
     reverse(Cards, ReversedCards),
-    writeln(Cards),writeln(ReversedCards),
     getSublist(Cards, Player),
     getSublist(ReversedCards, IA).
 
@@ -37,10 +36,27 @@ game(playerTurn):-
 game(iaTurn):-
     writeln("ia").
 
-game():-
+game(begin):-
     generateDeck(Deck),
-    generateDeck(Player, IA).
+    generateDeck(Player, IA),
+    getCard(Player, 0, 7, PlayerCard),
+    getCard(IA, 0, 7, IACard),
+    delete(Player, PlayerCard, PlayerDeck),
+    delete(IA, IACard, IADeck),
+    writeln(PlayerCard), writeln(IACard).
 
+game(playing, Count):-
+    Count \= 15,
+    mod(Count, 2, X),
+    (
+    X = 0 ->
+    game(playerTurn)
+    ;
+    game(iaTurn)    
+    ),
+    Count2 is Count + 1,
+    game(playing, Count2).
+    
     
     
 
