@@ -30,32 +30,32 @@ generateDeck(Player, IA):-
     getSublist(Cards, Player),
     getSublist(ReversedCards, IA).
 
-game(playerTurn):-
-    writeln("player").
-
-game(iaTurn):-
-    writeln("ia").
-
-game(begin):-
-    generateDeck(Deck),
+%start the game by generating the deck for the player and the IA and choosing their first card
+game(begin, PlayerDeck, IADeck):-
     generateDeck(Player, IA),
     getCard(Player, 0, 7, PlayerCard),
     getCard(IA, 0, 7, IACard),
     delete(Player, PlayerCard, PlayerDeck),
-    delete(IA, IACard, IADeck),
-    writeln(PlayerCard), writeln(IACard).
+    delete(IA, IACard, IADeck).
+/*
+--Input
+@Rule Current rule
+@Deck Current player deck
+@CardIndex Card choosed by the player
+@DeckPlayed Current cards used by the player
+--Output
+@Score score after the move
+@Status game status after the move *needs to be implemented
+@NewDeck player deck after the move
+*/
+game(move, Rule, Deck, CardIndex, DeckPlayed, Score, Status, NewDeck):-
+    getCard(Deck, 0, CardIndex, Card),
+    delete(Deck, Card, NewDeck),
+    append(DeckPlayed, [Card], NewDeckPlayed),
+    %updateStatus(A,B,Status),
+    rule(Rule, NewDeckPlayed, Score).
+    
 
-game(playing, Count):-
-    Count \= 15,
-    mod(Count, 2, X),
-    (
-    X = 0 ->
-    game(playerTurn)
-    ;
-    game(iaTurn)    
-    ),
-    Count2 is Count + 1,
-    game(playing, Count2).
     
     
     
