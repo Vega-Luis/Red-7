@@ -112,7 +112,7 @@ rule(run, Cards, Score):-
         sort(Singles, Sorted),
         countTheRun(Sorted, 1, [], Score).
 
-countTheRun([], Counter, ScoreList, Score):-
+countTheRun([], _, ScoreList, Score):-
         max_list(ScoreList, Score).
 
 countTheRun([Head|Tail], Counter, ScoreList, Score):-

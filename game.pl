@@ -53,8 +53,7 @@ generateDeck(multiple, GameDeck, PlayerQuantity, TempDecks, Decks):-
 
 generateDeck(PlayerQuantity, Decks):-
     generateDeck(GameDeck),
-    generateDeck(multiple, GameDeck, PlayerQuantity, [], Decks),
-    writeln(Decks).
+    generateDeck(multiple, GameDeck, PlayerQuantity, [], Decks).
 
 /*
 --Input
@@ -64,14 +63,13 @@ generateDeck(PlayerQuantity, Decks):-
 @DeckPlayed Current cards used by the player
 --Output
 @Score score after the move
-@Status game status after the move *needs to be implemented
 @NewDeck player deck after the move
+@NewDeckPlayed player playedDeck after the move
 */
-game(move, Rule, Deck, CardIndex, DeckPlayed, Score, Status, NewDeck):-
+game(Rule, Deck, CardIndex, DeckPlayed, Score, NewDeck, NewDeckPlayed):-
     getCard(Deck, 0, CardIndex, Card),
     delete(Deck, Card, NewDeck),
     append(DeckPlayed, [Card], NewDeckPlayed),
-    %updateStatus(A,B,Status),
     rule(Rule, NewDeckPlayed, Score).
     
 
