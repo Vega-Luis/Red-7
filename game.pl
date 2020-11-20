@@ -31,7 +31,7 @@ generateDeck(Player, IA):-
     getSublist(ReversedCards, IA).
 
 %start the game by generating the deck for the player and the IA and choosing their first card
-game(begin, PlayerDeck, IADeck):-
+game(begin, PlayerDeck, IADeck, PlayerCard, IACard):-
     generateDeck(Player, IA),
     getCard(Player, 0, 7, PlayerCard),
     getCard(IA, 0, 7, IACard),
