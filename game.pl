@@ -1,12 +1,12 @@
 :- ensure_loaded("gameKnowledge.pl").
 
-getSublist([_|Tail], Result):-
+getSublist([_|Tail], NewLength, NewList):-
     length(Tail, X),
     (
-        X = 8 ->
-        append(Tail,[], Result)
+        X = NewLength ->
+        append(Tail,[], NewList)
         ;
-        getSublist(Tail, Result)
+        getSublist(Tail, NewLength, NewList)
     ).
 
 getCard([Head|Tail], Current, Index, Result):-
@@ -18,17 +18,30 @@ getCard([Head|Tail], Current, Index, Result):-
     getCard(Tail, Current2, Index, Result)    
     ).
 
+generateDeck(done, TempDeck, TempDeck).
+
+generateDeck([Head|Tail], Count, TempDeck, Deck):-
+    (
+    Count > 0 ->
+    append([Head], TempDeck, NewDeck),
+    Count2 is Count - 1,
+    generateDeck(Tail, Count2, NewDeck, Deck)
+    ;
+    generateDeck(done, TempDeck, Deck)
+    ).
+
 %generate the deck for the game, there is a total of 49 cards
 generateDeck(Deck):-
     numlist(1,49,List),
     random_permutation(List, Deck). %shuffle list
 
-%generate the deck for the players, each deck size is of 7 cards
-generateDeck(Player, IA):-
+%generate the deck for a player, each deck size is of 7 cards
+generateDeck(Player, NewDeck):-
     generateDeck(Cards),
-    reverse(Cards, ReversedCards),
-    getSublist(Cards, Player),
-    getSublist(ReversedCards, IA).
+    generateDeck(Cards, 7, [], Player),
+    length(Cards, X),
+    NewLength is X - 7,
+    getSublist(Cards, NewLength, NewDeck).
 
 %start the game by generating the deck for the player and the IA and choosing their first card
 game(begin, PlayerDeck, IADeck, PlayerCard, IACard):-
