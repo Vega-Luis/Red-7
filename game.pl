@@ -18,38 +18,44 @@ getCard([Head|Tail], Current, Index, Result):-
     getCard(Tail, Current2, Index, Result)    
     ).
 
-generateDeck(done, TempDeck, TempDeck).
-
-generateDeck([Head|Tail], Count, TempDeck, Deck):-
-    (
-    Count > 0 ->
-    append([Head], TempDeck, NewDeck),
-    Count2 is Count - 1,
-    generateDeck(Tail, Count2, NewDeck, Deck)
-    ;
-    generateDeck(done, TempDeck, Deck)
-    ).
-
 %generate the deck for the game, there is a total of 49 cards
 generateDeck(Deck):-
     numlist(1,49,List),
     random_permutation(List, Deck). %shuffle list
 
-%generate the deck for a player, each deck size is of 7 cards
-generateDeck(Player, NewDeck):-
-    generateDeck(Cards),
-    generateDeck(Cards, 7, [], Player),
-    length(Cards, X),
-    NewLength is X - 7,
-    getSublist(Cards, NewLength, NewDeck).
+generateDeck(done, TempDeck, TempDeck).
 
-%start the game by generating the deck for the player and the IA and choosing their first card
-game(begin, PlayerDeck, IADeck, PlayerCard, IACard):-
-    generateDeck(Player, IA),
-    getCard(Player, 0, 7, PlayerCard),
-    getCard(IA, 0, 7, IACard),
-    delete(Player, PlayerCard, PlayerDeck),
-    delete(IA, IACard, IADeck).
+%generate 1 deck
+generateDeck(single, [Head|Tail], Count, TempDeck, Deck):-
+    (
+    Count > 0 ->
+    append([Head], TempDeck, NewDeck),
+    Count2 is Count - 1,
+    generateDeck(single, Tail, Count2, NewDeck, Deck)
+    ;
+    generateDeck(done, TempDeck, Deck)
+    ).
+
+%generate the deck for all players, each deck size is of 7 cards
+generateDeck(multiple, GameDeck, PlayerQuantity, TempDecks, Decks):-
+    (
+        PlayerQuantity > 0 ->
+        generateDeck(single, GameDeck, 7, [], NewDeck),
+        append(TempDecks, [NewDeck], TotalDecks),
+        length(GameDeck, X),
+        NewLength is X - 7,
+        getSublist(GameDeck, NewLength, NewGameDeck),
+        PlayerQuantity2 is PlayerQuantity - 1,
+        generateDeck(multiple, NewGameDeck, PlayerQuantity2, TotalDecks, Decks)
+        ;
+        generateDeck(done, TempDecks, Decks)
+    ).
+
+generateDeck(PlayerQuantity, Decks):-
+    generateDeck(GameDeck),
+    generateDeck(multiple, GameDeck, PlayerQuantity, [], Decks),
+    writeln(Decks).
+
 /*
 --Input
 @Rule Current rule
