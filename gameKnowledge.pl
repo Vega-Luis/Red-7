@@ -16,11 +16,14 @@ color(purple, X):-
 color(violet, X):-
         X is 0.
 
+mod(Number, Mod, Result):-
+        Result is Number - (Mod * floor(Number / Mod)).   
+
 getColor(Card, Color):-
         Color is ceil(Card / 7).  
 
 getCardNumber(Card, Number):- 
-        Result is Card - (7 * floor(Card /  7)),
+        mod(Card, 7, Result),
         (
         Result = 0 ->
         Number is 7
@@ -35,7 +38,7 @@ createDeck(_).
 
 %rule to check if number is pair
 isPair(Number, Result):- 
-        Result is Number - (2 * floor(Number /  2)).
+        mod(Number, 2, Result).
 
 countPairs([], Total, Total).
 
@@ -58,21 +61,6 @@ lowerThanFour([Head|Tail], Total, Score):-
         ;
         lowerThanFour(Tail, Total, Score)
         ).
-
-%number of pair cards rule
-rule(pairRule, List, Score):-
-        countPairs(List, 0, Score).
-
-rule(highestRule, List, Score):-
-        max_list(List, Score).
-
-rule(sameNumberRule, List, Element, Score):-
-        aggregate(max(Score1 ,Element1), ocurrence(List, Element1, Score1), max(Score,Element)).
-
-%Cards lower than 4 rule
-rule(below4Rule, List, Score):-
-        lowerThanFour(List, 0, Score).
-
 
 %transform a list of cards to a color list cards
 cardsToColors([], ColorList, ColorList).
@@ -97,20 +85,34 @@ getSingles([Head|Tail], Aux, Result):-
         getSingles(Tail, NewList, Result)
         ).
 
-%Cards of diferent color
+
+
+%red
+rule(highestRule, List, Score):-
+        max_list(List, Score).
+
+%Orange
+rule(sameNumberRule, List, Element, Score):-
+        aggregate(max(Score1 ,Element1), ocurrence(List, Element1, Score1), max(Score,Element)).
+
+%yellow
+
+%green
+rule(pairRule, List, Score):-
+        countPairs(List, 0, Score).
+
+%Blue
 rule(diferentColor, ColorList, Score):-
         getSingles(ColorList, [], Singles),
         length(Singles, Score).
 
-%cards that form a RUN(4 5 6 ... 12 3)
-%el numero de la carta, no la carta
-
+%Indigo
 rule(run, Cards, Score):-
         getSingles(Cards, [], Singles),
         sort(Singles, Sorted),
         countTheRun(Sorted, 1, [], Score).
 
-countTheRun([], Counter, ScoreList, Score):-
+countTheRun([], _, ScoreList, Score):-
         max_list(ScoreList, Score).
 
 countTheRun([Head|Tail], Counter, ScoreList, Score):-
@@ -130,3 +132,7 @@ countRun([Head|Tail], Temp, Counter, Output):-
         ;
                countRun(Tail, Temp, Counter, Output)
        ).
+
+%Violet
+rule(below4Rule, List, Score):-
+        lowerThanFour(List, 0, Score).
