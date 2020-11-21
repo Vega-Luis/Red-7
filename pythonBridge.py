@@ -68,7 +68,26 @@ def playGame():
                 players[playerNumber].playedCards = list(NewDeckPlayed.value)
                 print('Score:'+str(Score.value))
             q.closeQuery()
-        
+        else:
+            ia = Functor('nextMove', 7)
+            CardIndex = Variables()
+            NewRule = Variables()
+            q = Query(ia(RULES[1], RULES, players[playerNumber].deck, players[playerNumber].playedCards, 2, CardIndex, NewRule))
+            while q.nextSolution():
+                CardIndex = int(CardIndex.value)
+                print("Index ", CardIndex)
+                NewRule = str(NewRule.value)
+            q.closeQuery()
+            Score = Variable()
+            NewDeck = Variable()
+            NewDeckPlayed = Variable()
+            q = Query(game(NewRule, players[playerNumber].deck, CardIndex, players[playerNumber].playedCards, Score, NewDeck, NewDeckPlayed))
+            while q.nextSolution():
+                players[playerNumber].score = Score.value
+                players[playerNumber].deck = list(NewDeck.value)
+                players[playerNumber].playedCards = list(NewDeckPlayed.value)
+                print('Score:'+str(Score.value))
+            q.closeQuery()
 
 
     
