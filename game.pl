@@ -36,14 +36,14 @@ generateDeck(single, [Head|Tail], Count, TempDeck, Deck):-
     generateDeck(done, TempDeck, Deck)
     ).
 
-%generate the deck for all players, each deck size is of 7 cards
+%generate the deck for all players, each deck size is of 7 cards, but 1 more is added to be used as first card
 generateDeck(multiple, GameDeck, PlayerQuantity, TempDecks, Decks):-
     (
         PlayerQuantity > 0 ->
-        generateDeck(single, GameDeck, 7, [], NewDeck),
+        generateDeck(single, GameDeck, 8, [], NewDeck),
         append(TempDecks, [NewDeck], TotalDecks),
         length(GameDeck, X),
-        NewLength is X - 7,
+        NewLength is X - 8,
         getSublist(GameDeck, NewLength, NewGameDeck),
         PlayerQuantity2 is PlayerQuantity - 1,
         generateDeck(multiple, NewGameDeck, PlayerQuantity2, TotalDecks, Decks)
