@@ -1,5 +1,6 @@
 %prevent warning
 :-discontiguous rule/3.
+:- discontiguous rule/4.
 
 color(red, X):-
 	X is 6.
@@ -82,25 +83,33 @@ getSingles([Head|Tail], Aux, Result):-
         getSingles(Tail, NewList, Result)
         ).
 
-
-
 %red
 rule(highestRule, List, Score):-
-        max_list(List, Score).
+        maplist(getCardNumber, List, MappedList),
+        max_list(MappedList, Score).
 
 %Orange
-rule(sameNumberRule, List, Element, Score):-
+rule(sameNumberRule, List, Score):-
+        maplist(getCardNumber, List, MappedList),
+        rule(sameNumberRule, MappedList, _, Score). 
+
+rule(sameNumberRule, List, _, Score):-
         aggregate(max(Score1 ,Element1), ocurrence(List, Element1, Score1), max(Score,Element)).
-%programar regla PERO con 3
 
 %yellow
+rule(sameColorRule, List, Score):-
+        maplist(getColor, List, MappedList),
+        rule(sameColorRule, MappedList, _, Score). 
 
+rule(sameColorRule, List, _, Score):-
+        aggregate(max(Score1 ,Element1), ocurrence(List, Element1, Score1), max(Score,Element)).
 
 %green
 rule(pairRule, List, Score):-
-        countPairs(List, 0, Score).
+        maplist(getCardNumber, List, MappedList),
+        countPairs(MappedList, 0, Score).
 
-%Blue, lista
+%Blue
 rule(diferentColor, ColorList, Score):-
         getSingles(ColorList, [], Singles),
         length(Singles, Score).
@@ -109,7 +118,9 @@ rule(diferentColor, ColorList, Score):-
 rule(run, Cards, Score):-
         getSingles(Cards, [], Singles),
         sort(Singles, Sorted),
-        countTheRun(Sorted, 1, [], Score).
+        maplist(getCardNumber, Sorted, MappedList),
+        writeln(MappedList),
+        countTheRun(MappedList, 1, [], Score).
 
 countTheRun([], _, ScoreList, Score):-
         max_list(ScoreList, Score).
@@ -119,7 +130,6 @@ countTheRun([Head|Tail], Counter, ScoreList, Score):-
         append(ScoreList, [TempScore], NewList),
         countTheRun(Tail, Counter, NewList, Score).
 
-%    this works    
 countRun([], _Temp, Counter, Counter).
 
 countRun([Head|Tail], Temp, Counter, Output):-
@@ -134,4 +144,5 @@ countRun([Head|Tail], Temp, Counter, Output):-
 
 %Violet
 rule(below4Rule, List, Score):-
-        lowerThanFour(List, 0, Score).
+        maplist(getCardNumber, List, MappedList),
+        lowerThanFour(MappedList, 0, Score).
