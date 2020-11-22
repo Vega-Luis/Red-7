@@ -14,7 +14,7 @@ class Player:
 
 #Game constants
 PATH = 'game.pl'
-RULES = ['below4Rule','run','diferentColor','pairRule','yellow','sameNumberRule','highestRule']
+RULES = ['below4Rule','run','diferentColor','pairRule','sameColorRule','sameNumberRule','highestRule']
 
 #Variables
 prolog = Prolog()
