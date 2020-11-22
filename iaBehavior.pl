@@ -5,11 +5,11 @@
 %Necesito retornarle un indice
 %sucks
 nextMove(ActualRule, RulesList, PlayerCards, GameCards, MaxScore, CardIndex, NewRule):-
+    writeln("Yes"),
     getScores(ActualRule, PlayerCards, GameCards, [], ScoreList),
     max_list(ScoreList, NewMax),
     getRuleScores(RulesList, GameCards, [], RuleScoreList),
     max_list(RuleScoreList, MaxRuleScore),
-    writeln(MaxRuleScore),
     (
         (NewMax >= MaxRuleScore, NewMax > MaxScore) ->
         nth0(CardIndex, ScoreList, NewMax),
