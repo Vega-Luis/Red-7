@@ -31,9 +31,6 @@ getCardNumber(Card, Number):-
         Number is Result
         ).
 
-%to make the deck we must create a vector and shuffle it and get the first 14 elements
-createDeck(_).
-
 %defining the rules
 
 %rule to check if number is pair
@@ -94,14 +91,16 @@ rule(highestRule, List, Score):-
 %Orange
 rule(sameNumberRule, List, Element, Score):-
         aggregate(max(Score1 ,Element1), ocurrence(List, Element1, Score1), max(Score,Element)).
+%programar regla PERO con 3
 
 %yellow
+
 
 %green
 rule(pairRule, List, Score):-
         countPairs(List, 0, Score).
 
-%Blue
+%Blue, lista
 rule(diferentColor, ColorList, Score):-
         getSingles(ColorList, [], Singles),
         length(Singles, Score).
