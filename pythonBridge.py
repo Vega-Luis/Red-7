@@ -4,9 +4,11 @@ Created on Wed Oct 21 10:15:19 2020
 @author: marcos
 """
 from pyswip import *
-from tkinter import Button
-from tkinter import Tk
 from tkinter import ttk
+from tkinter import Tk
+from tkinter import Button
+from tkinter import Label
+from tkinter import StringVar
 
 class Player:
     def __init__(self):
@@ -112,6 +114,11 @@ def playGame():
         executeMovement(move[CURR_RULE], playerNumber, move[CARD_INDEX])
         playerTurn -= 1
 
+def updateWidget(pWidget):
+    text = StringVar()
+    text.set("Text")
+    pWidget.config(textvariable=text)  # añadimos una variable de texto
+
 def menu():
     menuWindow = Tk()
     menuWindow.title("Menú")
@@ -128,6 +135,11 @@ def gameWindow(pMainWindow, pPlayerQuantity):
     pMainWindow.destroy()
     initGame(int(pPlayerQuantity))
     gameWindow = Tk()
+    testLbl = Label(gameWindow, text = "hola")
+    testBtn = Button(gameWindow, text = "ChangeTxt", command = lambda: updateWidget(testLbl))
+    testBtn.pack()
+    testLbl.pack()
+    gameWindow.mainloop()
 
 
 if __name__ == "__main__":
