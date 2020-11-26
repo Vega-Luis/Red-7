@@ -13,16 +13,21 @@ nextMove(ActualRule, RulesList, PlayerCards, GameCards, MaxScore, CardIndex, New
     (
         (NewMax >= MaxRuleScore, NewMax > MaxScore) ->
         nth0(CardIndex, ScoreList, NewMax),
-        NewRule = ActualRule
+        NewRule = ActualRule,
+        !
     ;
         (
         (MaxRuleScore > MaxScore) ->
         nth0(CardIndex, RuleScoreList, MaxRuleScore),
-        nth0(MaxRuleScore, RuleScoreList, NewRule)
+        nth0(MaxRuleScore, RuleScoreList, NewRule),
+        !
         ;
-        writeln("JEJE")
+        CardIndex is -1,
+        NewRule = ActualRule,
+        !
         )
-    ).
+    ),
+    !.
 
 getRuleScores([], GameCards, RuleScoreList, RuleScoreList).
 

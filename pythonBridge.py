@@ -59,6 +59,7 @@ executes a move
 @pCardIndex index of the card choosed by the player
 """
 def executeMovement(pCurrentRule, pPlayerNumber, pCardIndex):
+    #prolog.consult("iaBehavior.pl")
     game = Functor('game', 7)
     Score = Variable()
     NewDeck = Variable()
@@ -73,17 +74,17 @@ def executeMovement(pCurrentRule, pPlayerNumber, pCardIndex):
     print('Score:'+str(players[pPlayerNumber].score))
 
 def IAMove(pCurrentRule, pPlayerNumber):
-    ia = Functor('nextMove', 7)
+    nextMove = Functor('nextMove', 7)
     CardIndex = Variable()
     NewRule = Variable()
     maxScore = getMaxScore()
-    q = Query(ia(pCurrentRule, RULES, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
+    q = Query(nextMove('below4Rule', RULES, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
     while q.nextSolution():
         CardIndex = int(CardIndex.value)
-        print("Index ", CardIndex)
+        print("Index " + str(CardIndex))
         NewRule = str(NewRule.value)
     q.closeQuery()
-    return [CardIndex, RULES[6]]
+    return [CardIndex, NewRule]
 
 def initGame(pPlayerQuantity):
     Decks = Variable()

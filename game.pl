@@ -1,4 +1,5 @@
 :- ensure_loaded("gameKnowledge.pl").
+:- ensure_loaded("iaBehavior.pl").
 
 getSublist([_|Tail], NewLength, NewList):-
     length(Tail, X),
