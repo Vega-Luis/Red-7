@@ -1,10 +1,12 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Oct 21 10:15:19 2020
 
 @author: marcos
 """
 from pyswip import *
+from tkinter import Button
+from tkinter import Tk
+from tkinter import ttk
 
 class Player:
     def __init__(self):
@@ -81,17 +83,16 @@ def IAMove(pCurrentRule, pPlayerNumber):
     q.closeQuery()
     return [CardIndex, RULES[6]]
 
-def initGame(playerQuantity):
+def initGame(pPlayerQuantity):
     Decks = Variable()
     generateDeck = Functor('generateDeck', 2)
-    q = Query(generateDeck(playerQuantity, Decks))
+    q = Query(generateDeck(pPlayerQuantity, Decks))
     while q.nextSolution(): 
         Decks = (list(Decks.value))
     for item in Decks:
         player = Player()
         player.deck = item[:7]
         player.playedCards.append(item[-1])
-        print(player.playedCards)
         players.append(player)
     q.closeQuery()
 
@@ -111,6 +112,25 @@ def playGame():
         executeMovement(move[CURR_RULE], playerNumber, move[CARD_INDEX])
         playerTurn -= 1
 
+def menu():
+    menuWindow = Tk()
+    menuWindow.title("Menú")
+    exitBtn = Button(menuWindow, text = "Salir", command = lambda: menuWindow.destroy())
+    playBtn = Button(menuWindow, text = "Jugar", command = lambda: gameWindow(menuWindow, playersOptions.get()))
+    playersOptions = ttk.Combobox(menuWindow, state="readonly")
+    playersOptions["values"] = [2, 3, 4]
+    playBtn.pack()
+    exitBtn.pack()
+    playersOptions.pack()
+    menuWindow.mainloop()
+    
+def gameWindow(pMainWindow, pPlayerQuantity):
+    pMainWindow.destroy()
+    initGame(int(pPlayerQuantity))
+    gameWindow = Tk()
+
+
 if __name__ == "__main__":
-    initGame(3)
-    playGame()
+    menu()
+    #initGame(3)
+    #playGame()
