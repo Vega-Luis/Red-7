@@ -1,10 +1,14 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Oct 21 10:15:19 2020
 
 @author: marcos
 """
 from pyswip import *
+from tkinter import ttk
+from tkinter import Tk
+from tkinter import Button
+from tkinter import Label
+from tkinter import StringVar
 
 class Player:
     def __init__(self):
@@ -55,6 +59,7 @@ executes a move
 @pCardIndex index of the card choosed by the player
 """
 def executeMovement(pCurrentRule, pPlayerNumber, pCardIndex):
+    #prolog.consult("iaBehavior.pl")
     game = Functor('game', 7)
     Score = Variable()
     NewDeck = Variable()
@@ -69,29 +74,28 @@ def executeMovement(pCurrentRule, pPlayerNumber, pCardIndex):
     print('Score:'+str(players[pPlayerNumber].score))
 
 def IAMove(pCurrentRule, pPlayerNumber):
-    ia = Functor('nextMove', 7)
+    nextMove = Functor('nextMove', 7)
     CardIndex = Variable()
     NewRule = Variable()
     maxScore = getMaxScore()
-    q = Query(ia(pCurrentRule, RULES, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
+    q = Query(nextMove('below4Rule', RULES, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
     while q.nextSolution():
         CardIndex = int(CardIndex.value)
-        print("Index ", CardIndex)
+        print("Index " + str(CardIndex))
         NewRule = str(NewRule.value)
     q.closeQuery()
-    return [CardIndex, RULES[6]]
+    return [CardIndex, NewRule]
 
-def initGame(playerQuantity):
+def initGame(pPlayerQuantity):
     Decks = Variable()
     generateDeck = Functor('generateDeck', 2)
-    q = Query(generateDeck(playerQuantity, Decks))
+    q = Query(generateDeck(pPlayerQuantity, Decks))
     while q.nextSolution(): 
         Decks = (list(Decks.value))
     for item in Decks:
         player = Player()
         player.deck = item[:7]
         player.playedCards.append(item[-1])
-        print(player.playedCards)
         players.append(player)
     q.closeQuery()
 
@@ -111,6 +115,35 @@ def playGame():
         executeMovement(move[CURR_RULE], playerNumber, move[CARD_INDEX])
         playerTurn -= 1
 
+def updateWidget(pWidget):
+    text = StringVar()
+    text.set("Text")
+    pWidget.config(textvariable=text)  # añadimos una variable de texto
+
+def menu():
+    menuWindow = Tk()
+    menuWindow.title("Menú")
+    exitBtn = Button(menuWindow, text = "Salir", command = lambda: menuWindow.destroy())
+    playBtn = Button(menuWindow, text = "Jugar", command = lambda: gameWindow(menuWindow, playersOptions.get()))
+    playersOptions = ttk.Combobox(menuWindow, state="readonly")
+    playersOptions["values"] = [2, 3, 4]
+    playBtn.pack()
+    exitBtn.pack()
+    playersOptions.pack()
+    menuWindow.mainloop()
+    
+def gameWindow(pMainWindow, pPlayerQuantity):
+    pMainWindow.destroy()
+    initGame(int(pPlayerQuantity))
+    gameWindow = Tk()
+    testLbl = Label(gameWindow, text = "hola")
+    testBtn = Button(gameWindow, text = "ChangeTxt", command = lambda: updateWidget(testLbl))
+    testBtn.pack()
+    testLbl.pack()
+    gameWindow.mainloop()
+
+
 if __name__ == "__main__":
-    initGame(3)
-    playGame()
+    menu()
+    #initGame(3)
+    #playGame()
