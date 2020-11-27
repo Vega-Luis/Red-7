@@ -24,7 +24,7 @@ RULES = ['below4Rule','run','diferentColor','pairRule','sameColorRule','sameNumb
 prolog = Prolog()
 prolog.consult(PATH)
 players = []
-
+currentRule = RULES[6]
 #gets the current max score of the game
 def getMaxScore():
     maxScore = 0
@@ -58,13 +58,13 @@ executes a move
 @pPlayerNumber index of the player that is going to do the move
 @pCardIndex index of the card choosed by the player
 """
-def executeMovement(pCurrentRule, pPlayerNumber, pCardIndex):
+def executeMovement(pPlayerNumber, pCardIndex):
     #prolog.consult("iaBehavior.pl")
     game = Functor('game', 7)
     Score = Variable()
     NewDeck = Variable()
     NewDeckPlayed = Variable()
-    q = Query(game(pCurrentRule, players[pPlayerNumber].deck, pCardIndex, players[pPlayerNumber].playedCards, Score, NewDeck, NewDeckPlayed))
+    q = Query(game(currentRule, players[pPlayerNumber].deck, pCardIndex, players[pPlayerNumber].playedCards, Score, NewDeck, NewDeckPlayed))
     while q.nextSolution():
         players[pPlayerNumber].score = Score.value
         players[pPlayerNumber].deck = list(NewDeck.value)
@@ -73,12 +73,12 @@ def executeMovement(pCurrentRule, pPlayerNumber, pCardIndex):
     print(players[pPlayerNumber].playedCards)
     print('Score:'+str(players[pPlayerNumber].score))
 
-def IAMove(pCurrentRule, pPlayerNumber):
+def IAMove(pPlayerNumber):
     nextMove = Functor('nextMove', 7)
     CardIndex = Variable()
     NewRule = Variable()
     maxScore = getMaxScore()
-    q = Query(nextMove('below4Rule', RULES, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
+    q = Query(nextMove(currentRule, RULES, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
     while q.nextSolution():
         CardIndex = int(CardIndex.value)
         print("Index " + str(CardIndex))
@@ -104,7 +104,7 @@ def playGame():
     CARD_INDEX = 0
     CURR_RULE = 1
     while(len(players) != 1):
-        move = [0, RULES[6]]
+        move = [0, currentRule]
         playerNumber = playerTurn % 3
         print(players[playerNumber].deck)
         if(playerNumber == 0):
@@ -136,12 +136,17 @@ def gameWindow(pMainWindow, pPlayerQuantity):
     pMainWindow.destroy()
     initGame(int(pPlayerQuantity))
     gameWindow = Tk()
-    testLbl = Label(gameWindow, text = "hola")
-    testBtn = Button(gameWindow, text = "ChangeTxt", command = lambda: updateWidget(testLbl))
-    testBtn.pack()
-    testLbl.pack()
+    generatePlayerCards(gameWindow)
+    #testLbl = Label(gameWindow, text = "hola")
+    #testBtn = Button(gameWindow, text = "ChangeTxt", command = lambda: updateWidget(testLbl))
+    #testBtn.pack()
+    #testLbl.pack()
     gameWindow.mainloop()
 
+def generatePlayerCards(pGameWindow):
+    for i in range(len(players[0].deck)):
+        btn = Button(pGameWindow, text = str(i), command = lambda: executeMovement(0, i))
+        btn.grid(row = 0, column = i)
 
 if __name__ == "__main__":
     menu()
