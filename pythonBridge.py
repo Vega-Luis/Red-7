@@ -9,10 +9,12 @@ from tkinter import Tk
 from tkinter import Button
 from tkinter import Label
 from tkinter import StringVar
+from tkinter import PhotoImage
 from PIL import Image
 
 class Player:
     def __init__(self):
+        self.cardImages = []
         self.deck = []
         self.playedCards = []
         self.score = 0
@@ -96,6 +98,8 @@ def initGame(pPlayerQuantity):
     for item in Decks:
         player = Player()
         player.deck = item[:7]
+        print(item[:7])
+        print(item[-1])
         player.playedCards.append(item[-1])
         players.append(player)
     q.closeQuery()
@@ -117,9 +121,13 @@ def playGame():
         playerTurn -= 1
 
 def generateCardImage(pBackground, pNumber):
+    numberSize = 32, 32
     number = Image.open('sources/' + pNumber + '.png', 'r')
+    number.thumbnail(numberSize, Image.ANTIALIAS)
     numberWidth, numberHeight = number.size
     background = Image.open('sources/' + pBackground + '.png', 'r')
+    backGroundsize = 128,128
+    background.thumbnail(backGroundsize, Image.ANTIALIAS)
     bgWidth, bgHeight = background.size
     offset = ((bgWidth - numberWidth) // 2, (bgHeight - numberHeight) // 2)
     background.paste(number, offset, number)
@@ -147,19 +155,59 @@ def gameWindow(pMainWindow, pPlayerQuantity):
     initGame(int(pPlayerQuantity))
     gameWindow = Tk()
     generatePlayerCards(gameWindow)
-    #testLbl = Label(gameWindow, text = "hola")
-    #testBtn = Button(gameWindow, text = "ChangeTxt", command = lambda: updateWidget(testLbl))
-    #testBtn.pack()
-    #testLbl.pack()
     gameWindow.mainloop()
+
+def getCardColorName(pCard):
+    getCardColorName = Functor('getCardColorName', 2)
+    ColorName = Variable()
+    q = Query(getCardColorName(pCard, ColorName))
+    while q.nextSolution():
+        ColorName = str(ColorName.value)
+    q.closeQuery()
+    return ColorName
+
+def getCardNumber(pCard):
+    getCardColorName = Functor('getCardNumber', 2)
+    Number = Variable()
+    q = Query(getCardColorName(pCard, Number))
+    while q.nextSolution():
+        Number = str(Number.value)
+    q.closeQuery()
+    return Number
+
+def placePlayedCard(pPlayerIndex, pGameWindow):
+    playerRow = 0
+    playerColumn = 0
+    generateCardImage(getCardColorName(players[pPlayerIndex].playedCards[-1]), getCardNumber(players[pPlayerIndex].playedCards[-1]))
+    players[pPlayerIndex].cardImages.append(PhotoImage(file = r'card.png'))
+    if(pPlayerIndex == 0):
+        playerRow = 1
+        playerColumn =  len(players[pPlayerIndex].playedCards)
+    else:
+        if(pPlayerIndex == 1):
+            playerRow = len(players[pPlayerIndex].playedCards) + 1
+            playerColumn = 8
+        elif(pPlayerIndex == 2):
+            playerRow = 8
+            playerColumn = len(players[pPlayerIndex].playedCards)
+        else:
+            playerRow = len(players[pPlayerIndex].playedCards) + 1
+            playerColumn = 0
+    lbl = Label(pGameWindow, text = str(pPlayerIndex), image = players[pPlayerIndex].cardImages[-1])
+    lbl2 = Label(pGameWindow, text = "Score")
+    lbl2.grid(row = 0, column = 0)
+    lbl.grid(row = playerRow, column = playerColumn, columnspan = 1)
 
 def generatePlayerCards(pGameWindow):
     for i in range(len(players[0].deck)):
-        btn = Button(pGameWindow, text = str(i), command = lambda: executeMovement(0, i))
-        btn.grid(row = 0, column = i)
+        generateCardImage(getCardColorName(players[0].deck[i]), getCardNumber(players[0].deck[i]))
+        players[0].cardImages.append(PhotoImage(file = r'card.png'))
+        btn = Button(pGameWindow, text = '', image = players[0].cardImages[i] , command = lambda: executeMovement(0, i))
+        btn.grid(row = 0, column = i+1)
+    for i in range(len(players)):
+        placePlayedCard(i, pGameWindow)
 
 if __name__ == "__main__":
-    generateCardImage('blue','one')
-    #menu()
+    menu()
     #initGame(3)
     #playGame()
