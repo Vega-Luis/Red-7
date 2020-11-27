@@ -10,9 +10,9 @@ color(yellow, X):-
         X is 4.
 color(green, X):-
         X is 3.
-color(lBlue, X):-
+color(blue, X):-
         X is 2.
-color(purple, X):-
+color(indigo, X):-
         X is 1.
 color(violet, X):-
         X is 0.
@@ -22,6 +22,11 @@ mod(Number, Mod, Result):-
 
 getColor(Card, Color):-
         Color is ceil(Card / 7).  
+
+getColorName(Card, ColorName):-
+        getColor(Card, Color),
+        color(ColorName, Color),
+        !.
 
 getCardNumber(Card, Number):- 
         mod(Card, 7, Result),
