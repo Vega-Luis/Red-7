@@ -9,6 +9,7 @@ from tkinter import Tk
 from tkinter import Button
 from tkinter import Label
 from tkinter import StringVar
+from PIL import Image
 
 class Player:
     def __init__(self):
@@ -43,7 +44,7 @@ def chooseFirstPlayer():
             maxScore = tempMax
             index = tempIndex
         tempIndex += 1
-    return index - 1 #
+    return index - 1 
         
 def prologQuery():
     res = prolog.query('like_fried_chicken(basten)')
@@ -115,6 +116,15 @@ def playGame():
         executeMovement(move[CURR_RULE], playerNumber, move[CARD_INDEX])
         playerTurn -= 1
 
+def generateCardImage(pBackground, pNumber):
+    number = Image.open('sources/' + pNumber + '.png', 'r')
+    numberWidth, numberHeight = number.size
+    background = Image.open('sources/' + pBackground + '.png', 'r')
+    bgWidth, bgHeight = background.size
+    offset = ((bgWidth - numberWidth) // 2, (bgHeight - numberHeight) // 2)
+    background.paste(number, offset, number)
+    background.save('card.png')
+
 def updateWidget(pWidget):
     text = StringVar()
     text.set("Text")
@@ -149,6 +159,7 @@ def generatePlayerCards(pGameWindow):
         btn.grid(row = 0, column = i)
 
 if __name__ == "__main__":
-    menu()
+    generateCardImage('blue','one')
+    #menu()
     #initGame(3)
     #playGame()
