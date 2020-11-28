@@ -10,6 +10,7 @@ from tkinter import Button
 from tkinter import Label
 from tkinter import StringVar
 from tkinter import PhotoImage
+from tkinter import messagebox
 from PIL import Image
 
 class Player:
@@ -18,6 +19,8 @@ class Player:
         self.deck = []
         self.playedCards = []
         self.score = 0
+        self.btns = []
+        self.out = False
 
 #Game constants
 PATH = 'game.pl'
@@ -28,11 +31,13 @@ prolog = Prolog()
 prolog.consult(PATH)
 players = []
 currentRule = RULES[6]
+playerTurn = 0
 #gets the current max score of the game
 def getMaxScore():
     maxScore = 0
     for player in players:
-        maxScore = max(maxScore, player.score)
+        if(player.out == False):
+            maxScore = max(maxScore, player.score)
     return maxScore
 
 #choose the player on the left of the player with max score to begin the game
@@ -61,8 +66,8 @@ executes a move
 @pPlayerNumber index of the player that is going to do the move
 @pCardIndex index of the card choosed by the player
 """
-def executeMovement(pPlayerNumber, pCardIndex):
-    #prolog.consult("iaBehavior.pl")
+def executeMovement(pPlayerNumber, pCardIndex, pGameWindow, pIsPlayer):
+    players[0].btns[pCardIndex].config(state="disabled")
     game = Functor('game', 7)
     Score = Variable()
     NewDeck = Variable()
@@ -70,13 +75,22 @@ def executeMovement(pPlayerNumber, pCardIndex):
     q = Query(game(currentRule, players[pPlayerNumber].deck, pCardIndex, players[pPlayerNumber].playedCards, Score, NewDeck, NewDeckPlayed))
     while q.nextSolution():
         players[pPlayerNumber].score = Score.value
-        players[pPlayerNumber].deck = list(NewDeck.value)
         players[pPlayerNumber].playedCards = list(NewDeckPlayed.value)
     q.closeQuery()
+    placePlayedCard(pPlayerNumber, pGameWindow)
     print(players[pPlayerNumber].playedCards)
     print('Score:'+str(players[pPlayerNumber].score))
+    if(pIsPlayer):
+        playGame(pGameWindow)
 
-def IAMove(pPlayerNumber):
+def updateRule(pRule):
+    currentRule = pRule
+
+def deletePlayer(pIndex):
+    players[pIndex].out = True
+    players[pIndex].cardImages = 0
+
+def IAMove(pPlayerNumber, pGameWindow):
     nextMove = Functor('nextMove', 7)
     CardIndex = Variable()
     NewRule = Variable()
@@ -84,10 +98,16 @@ def IAMove(pPlayerNumber):
     q = Query(nextMove(currentRule, RULES, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
     while q.nextSolution():
         CardIndex = int(CardIndex.value)
-        print("Index " + str(CardIndex))
         NewRule = str(NewRule.value)
     q.closeQuery()
-    return [CardIndex, NewRule]
+    if(CardIndex == -1):
+        messagebox.showinfo('El jugador'+str(pPlayerNumber % len(players))+' ha perdido :(')
+        deletePlayer(pPlayerNumber % len(players))
+    else:
+        if(currentRule != NewRule):
+            messagebox.showinfo('El jugador'+str(pPlayerNumber % len(players))+' ha cambiado la regla actual')
+            updateRule(NewRule)
+        executeMovement(pPlayerNumber, CardIndex, pGameWindow, False)
 
 def initGame(pPlayerQuantity):
     Decks = Variable()
@@ -98,27 +118,15 @@ def initGame(pPlayerQuantity):
     for item in Decks:
         player = Player()
         player.deck = item[:7]
-        print(item[:7])
-        print(item[-1])
         player.playedCards.append(item[-1])
         players.append(player)
     q.closeQuery()
-
-def playGame():
     playerTurn = chooseFirstPlayer()
-    CARD_INDEX = 0
-    CURR_RULE = 1
-    while(len(players) != 1):
-        move = [0, currentRule]
-        playerNumber = playerTurn % 3
-        print(players[playerNumber].deck)
-        if(playerNumber == 0):
-            print("Elija su carta")
-            move[CARD_INDEX] = int(input())
-        else:
-            move = IAMove(move[CURR_RULE], playerNumber)
-        executeMovement(move[CURR_RULE], playerNumber, move[CARD_INDEX])
-        playerTurn -= 1
+
+def playGame(pGameWindow):
+    for i in range(len(players)):
+        if(players[i].out == False and i != 0):
+            IAMove(i, pGameWindow)
 
 def generateCardImage(pBackground, pNumber):
     numberSize = 32, 32
@@ -156,6 +164,7 @@ def gameWindow(pMainWindow, pPlayerQuantity):
     gameWindow = Tk()
     generatePlayerCards(gameWindow)
     gameWindow.mainloop()
+    playGame(gameWindow)
 
 def getCardColorName(pCard):
     getCardColorName = Functor('getCardColorName', 2)
@@ -202,12 +211,11 @@ def generatePlayerCards(pGameWindow):
     for i in range(len(players[0].deck)):
         generateCardImage(getCardColorName(players[0].deck[i]), getCardNumber(players[0].deck[i]))
         players[0].cardImages.append(PhotoImage(file = r'card.png'))
-        btn = Button(pGameWindow, text = '', image = players[0].cardImages[i] , command = lambda: executeMovement(0, i))
+        btn = Button(pGameWindow, text = '', image = players[0].cardImages[i] , command = lambda tmpRow = 0, tmpColumn = i: executeMovement(tmpRow, tmpColumn, pGameWindow, True))
         btn.grid(row = 0, column = i+1)
+        players[0].btns.append(btn)
     for i in range(len(players)):
         placePlayedCard(i, pGameWindow)
 
 if __name__ == "__main__":
     menu()
-    #initGame(3)
-    #playGame()
