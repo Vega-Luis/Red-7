@@ -32,7 +32,7 @@ prolog.consult(PATH)
 players = []
 currentRule = RULES[6]
 currentRuleImg = []
-playerTurn = 0
+playerTurn = []
 #gets the current max score of the game
 def getMaxScore():
     maxScore = 0
@@ -144,12 +144,16 @@ def initGame(pPlayerQuantity):
             player.score = int(Score.value)
         q.closeQuery()
         players.append(player)
-    playerTurn = chooseFirstPlayer()
+    playerTurn.append(chooseFirstPlayer())
 
 def playGame(pGameWindow):
     for i in range(len(players)):
-        if(players[i].out == False and i != 0):
-            IAMove(i, pGameWindow)
+        playerTurn[0] += 1
+        playerTurn[0] %= (len(players))
+        if(playerTurn[0] % len(players) == 0):
+            break
+        if(players[playerTurn[0]].out == False):
+            IAMove(playerTurn[0], pGameWindow)
 
 def generateCardImage(pBackground, pNumber):
     numberSize = 32, 32
