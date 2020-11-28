@@ -3,25 +3,30 @@
 :- discontiguous rule/4.
 
 color(red, X):-
-	X is 6.
+	X is 7.
 color(orange, X):-
-        X is 5.
+        X is 6.
 color(yellow, X):-
-        X is 4.
+        X is 5.
 color(green, X):-
+        X is 4.
+color(blue, X):-
         X is 3.
-color(lBlue, X):-
+color(indigo, X):-
         X is 2.
-color(purple, X):-
-        X is 1.
 color(violet, X):-
-        X is 0.
+        X is 1.
 
 mod(Number, Mod, Result):-
         Result is Number - (Mod * floor(Number / Mod)).   
 
 getColor(Card, Color):-
         Color is ceil(Card / 7).  
+
+getCardColorName(Card, ColorName):-
+        getColor(Card, Color),
+        color(ColorName, Color),
+        !.
 
 getCardNumber(Card, Number):- 
         mod(Card, 7, Result),
@@ -119,7 +124,6 @@ rule(run, Cards, Score):-
         getSingles(Cards, [], Singles),
         sort(Singles, Sorted),
         maplist(getCardNumber, Sorted, MappedList),
-        writeln(MappedList),
         countTheRun(MappedList, 1, [], Score).
 
 countTheRun([], _, ScoreList, Score):-

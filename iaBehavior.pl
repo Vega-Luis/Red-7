@@ -5,7 +5,6 @@
 %Necesito retornarle un indice
 %sucks
 nextMove(ActualRule, RulesList, PlayerCards, GameCards, MaxScore, CardIndex, NewRule):-
-    writeln("Yes"),
     getScores(ActualRule, PlayerCards, GameCards, [], ScoreList),
     max_list(ScoreList, NewMax),
     getRuleScores(RulesList, GameCards, [], RuleScoreList),
@@ -13,21 +12,20 @@ nextMove(ActualRule, RulesList, PlayerCards, GameCards, MaxScore, CardIndex, New
     (
         (NewMax >= MaxRuleScore, NewMax > MaxScore) ->
         nth0(CardIndex, ScoreList, NewMax),
-        NewRule = ActualRule,
-        !
+        NewRule = ActualRule
     ;
         (
         (MaxRuleScore > MaxScore) ->
         nth0(CardIndex, RuleScoreList, MaxRuleScore),
-        nth0(MaxRuleScore, RuleScoreList, NewRule),
+        nth0(MaxRuleScore, RuleScoreList, NewRuleIndex), 
+        nth0(NewRuleIndex, RulesList, NewRule), 
         !
         ;
         CardIndex is -1,
-        NewRule = ActualRule,
-        !
+        NewRule = ActualRule
         )
-    ),
-    !.
+    ).
+    
 
 getRuleScores([], GameCards, RuleScoreList, RuleScoreList).
 
