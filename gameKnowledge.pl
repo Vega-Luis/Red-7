@@ -124,7 +124,6 @@ rule(run, Cards, Score):-
         getSingles(Cards, [], Singles),
         sort(Singles, Sorted),
         maplist(getCardNumber, Sorted, MappedList),
-        writeln(MappedList),
         countTheRun(MappedList, 1, [], Score).
 
 countTheRun([], _, ScoreList, Score):-
