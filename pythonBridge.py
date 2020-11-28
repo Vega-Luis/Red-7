@@ -167,11 +167,11 @@ def generateCardImage(pBackground, pNumber):
 def updateWidget(pWidget):
     text = StringVar()
     text.set("Text")
-    pWidget.config(textvariable=text)  # añadimos una variable de texto
+    pWidget.config(textvariable=text)  # anadimos una variable de texto
 
 def menu():
     menuWindow = Tk()
-    menuWindow.title("Menú")
+    menuWindow.title("Menu")
     exitBtn = Button(menuWindow, text = "Salir", command = lambda: menuWindow.destroy())
     playBtn = Button(menuWindow, text = "Jugar", command = lambda: gameWindow(menuWindow, playersOptions.get()))
     playersOptions = ttk.Combobox(menuWindow, state="readonly")

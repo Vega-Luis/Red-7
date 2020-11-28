@@ -17,6 +17,22 @@ color(indigo, X):-
 color(violet, X):-
         X is 1.
 
+colorRule(7, 'highestRule').
+colorRule(6, 'sameNumberRule').
+colorRule(5, 'sameColorRule').
+colorRule(4, 'pairRule').
+colorRule(3, 'diferentColor').
+colorRule(2, 'run').
+colorRule(1, 'below4Rule').
+
+cardsToRules([], RulesList, RulesList).
+
+cardsToRules([Head|Tail], AuxList, RulesList):-
+        colorRule(Head, Rule),
+        append(AuxList, [Rule], Result),
+        cardsToRules(Tail, Result, RulesList).
+
+
 mod(Number, Mod, Result):-
         Result is Number - (Mod * floor(Number / Mod)).   
 
