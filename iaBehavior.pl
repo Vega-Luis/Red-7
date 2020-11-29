@@ -56,7 +56,6 @@ getMoveScore(ActualRule, Move, Score):-
 getPlayersPlayedCardsMaxScore([], ActualRule, PlayerMaxScore, PlayerMaxScore).
 
 getPlayersPlayedCardsMaxScore([Head|Tail], ActualRule, TempMaxScore, PlayerMaxScore):-
-    writeln(ActualRule),
     getMoveScore(ActualRule, Head, Score),
     append(TempMaxScore, [Score], NewList),
     getPlayersPlayedCardsMaxScore(Tail, ActualRule, NewList, PlayerMaxScore).

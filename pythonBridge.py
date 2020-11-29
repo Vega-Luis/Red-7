@@ -58,16 +58,20 @@ def checkWin(pGameWindow):
         pGameWindow.destroy()
 
 #choose the player on the left of the player with max score to begin the game
-def chooseFirstPlayer():
+def chooseFirstPlayer(pGameWindow):
     index = 0
     tempIndex = 0
-    maxScore = 0
+    score = 0
     for player in players:
-        tempMax = max(maxScore, player.score)
-        if(tempMax != maxScore):
-            maxScore = tempMax
+        tempMax = max(score, player.score)
+        if(tempMax != score):
+            score = tempMax
             index = tempIndex
         tempIndex += 1
+    scoreLbl = Label(pGameWindow, text = 'El jugador '+str(index)+'\n va ganando con \n un Score de: '+str(players[index].score))
+    scoreLbl.lift
+    scoreLbl.grid(row = 0, column = 0)
+    maxScore.append(scoreLbl)
     return index + 1
         
 def changePlayerRule(pCardIndex, pGameWindow):
@@ -181,12 +185,13 @@ def IAMove(pPlayerNumber, pGameWindow):
         if(isinstance(NewRule, str) == False):
             NewRule = str(NewRule.value)
     q.closeQuery()
+    print(NewRule)
     if(CardIndex == -1):
         messagebox.showinfo('El jugador'+str(pPlayerNumber % len(players))+' ha perdido :(')
         deletePlayer(pPlayerNumber % len(players))
         checkWin(pGameWindow)
     else:
-        if(currentRule[0] != NewRule and isinstance(NewRule, str)):
+        if(currentRule[0] != NewRule):
             messagebox.showinfo('El jugador'+str(pPlayerNumber % len(players))+' ha cambiado la regla actual')
             updateRule(NewRule, pGameWindow)
         else:
@@ -210,7 +215,6 @@ def initGame(pPlayerQuantity):
             player.score = int(Score.value)
         q.closeQuery()
         players.append(player)
-    playerTurn.append(chooseFirstPlayer())
 
 def playGame(pGameWindow):
     for i in range(len(players)):
@@ -256,6 +260,7 @@ def gameWindow(pMainWindow, pPlayerQuantity):
     pMainWindow.destroy()
     initGame(int(pPlayerQuantity))
     gameWindow = Tk()
+    playerTurn.append(chooseFirstPlayer(gameWindow))
     checkBox.append(ttk.Checkbutton(gameWindow, text="CambiarRegla"))
     checkBox[0].grid(row = 0, column = 10)
     generatePlayerCards(gameWindow)
