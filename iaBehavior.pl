@@ -6,31 +6,23 @@
 %sucks
 nextMove(ActualRule, _, PlayerCards, GameCards, MaxScore, CardIndex, NewRule):-
     cardsToColors(PlayerCards, [], ColorsList),
+    maplist(getCardNumber, PlayerCards, MappedList),
     cardsToRules(ColorsList, [], RulesList),
-    writeln("hola"),
     getScores(ActualRule, PlayerCards, GameCards, [], ScoreList),
-    writeln(ScoreList),
     max_list(ScoreList, NewMax),
-    writeln(NewMax),
     getRuleScores(RulesList, GameCards, [], RuleScoreList),
-    writeln(RuleScoreList),
     max_list(RuleScoreList, MaxRuleScore),
-    writeln(MaxRuleScore),
     (
-        (NewMax >= MaxRuleScore, NewMax > MaxScore) ->
+        (NewMax >= MaxRuleScore, NewMax >= MaxScore) ->
         nth0(CardIndex, ScoreList, NewMax),
-        NewRule = ActualRule,
-        writeln("primer if"),
-        !
-    ;
+        NewRule = ActualRule
+    ; 
         (
-        writeln("segundo if"),
-        (MaxRuleScore > MaxScore) ->
+        MaxRuleScore > MaxScore ->
         nth0(CardIndex, RuleScoreList, MaxRuleScore),
         nth0(MaxRuleScore, RuleScoreList, NewRuleIndex), 
         nth0(NewRuleIndex, RulesList, NewRule)
         ;
-        writeln("ultimo else"),
         CardIndex is -1,
         NewRule = ActualRule
         )
