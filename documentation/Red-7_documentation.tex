@@ -1,0 +1,118 @@
+%% LyX 2.3.4.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[letterpaper,leqno,spanish,english,compsoc]{IEEEtran}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{cite}
+\pagestyle{fancy}
+\synctex=-1
+\usepackage{endnotes}
+\usepackage{setspace}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\pdfpageheight\paperheight
+\pdfpagewidth\paperwidth
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\let\footnote=\endnote
+\newlength{\lyxlabelwidth}      % auxiliary length 
+
+\makeatother
+
+\usepackage{babel}
+\addto\shorthandsspanish{\spanishdeactivate{~<>}}
+
+\usepackage{listings}
+\lstset{language={[ANSI]C++},
+float=h,
+numbers=left,
+numberstyle={\tiny},
+stepnumber=1,
+basicstyle={\footnotesize\ttfamily},
+tabsize=2}
+\begin{document}
+\selectlanguage{spanish}%
+\begin{titlepage}
+\begin{center}
+\textbf{\large{}Instituto Tecnológico de Costa Rica, sede Cartago}\\
+\textbf{\large{}Escuela de computación}\\
+\textbf{\large{}Programación Lógica}{\large\par}
+\par\end{center}
+
+\vspace{1.25cm}
+
+\begin{center}
+\textbf{\LARGE{}Proyecto 01}\\
+\textbf{\LARGE{}Red 7 }{\LARGE\par}
+\par\end{center}
+
+\begin{singlespace}
+\begin{center}
+\vspace{1cm}
+est. Luis Ángel Vega Rodríguez 2018161651 \\
+est. Marcos Méndez Hídalgo\\
+Prof. Ing. Luis Roberto Villalobos Arias 
+\par\end{center}
+\end{singlespace}
+
+\smallskip{}
+
+\begin{center}
+Semestre 2\\
+28 de noviembre, 2020
+\par\end{center}
+
+\vspace{1cm}
+
+Resumen ejecutivo
+
+\end{titlepage}
+
+\section*{{\LARGE{}Introducción }}
+La programación lógica es un paradigma poco conocido pero, sin embargo, poderoso.
+Una de las mejores formas de aprender un nuevo lenguaje o paradigma, es por supuesto, la práctica y es aún más eficiente cuando esta es divertida y fácil de percibir.
+
+Red 7 es un juego de mesa por turnos donde cada jugador inicia con 7 cartas las cuales debe usar de la forma más inteligente posible, para 
+
+
+\subsection*{{\LARGE{}Objetivos }}
+Incursionar en la programación lógica por medio del lenguaje ProLog.
+Aplicar los concimientos de lógica símbolica a la programción en ProLog.
+Experimentar el verdadero poder de la programación lógica.
+\subsection*{{\LARGE{}Delimitaciones }}
+Uno de los mayores inconvenientes para empezar con el desarrollo del proyecto, fue la inexperiencia con el lenguaje de programación Prolog, 
+no es un lenguaje que se acostumbre ver en profundidad en la carrera. A eso se le suma que nunca se había hecho una IA antes, está es la primera
+vez que se realiza una. Uno de los estudiantes presentó problemas mayores con su internet, esto debido a la zona en la que vive, lo cuál produjo
+que se entorpecieran algunos procesos de unión de código e ideas.
+
+\subsection*{{\LARGE{}Alcance }}
+El proyecto se prevee que no tenga un gran alcance, después de todo es realizado por unos estudiantes con el fin de tener un mejor desarrollo
+académico, por lo que todo el trabajo que se haga es con el fin de aprender lo más que se pueda y no el de presentar un desarrollo que cumpla
+con lo excelente. En ocasiones la ruta a la excelencia no es siempre por la que más se aprende.
+
+\subsection*{{\LARGE{}Definición del problema }}
+El problema de primeras no se ve tan complejo, hay que desarollar una inteligencia artificial que sea capaz de jugar el juego de mesa Red 7 en contra
+de una persona y varias inteligencia artificiales. A medida que se desarrolló el proyecto, se notaron una gran cantidad de subproblemas arraigados o bien
+al juego o bien a la realización de una interfaz gráfica dirigida tanto por un jugador real como por una inteligencia artificial.
+
+\section*{{\LARGE{}Valoraciones }}
+Fue necesario valorar en como representar el sistema de cartas en el juego, también todo lo referente a manejo de jugadores, turnos, derrota, victoria, empates. //
+Además se tuvo que pensar en como diseñar el comportamiento de la inteligencia artificial(Backtracking) para que este no fuera en exceso agresivo ni muy simple,
+esta inteligencia debe de representar un reto a lo suficiente como para que la persona que juegue tenga que realmente esforzarce por ganarle a la inteligencia, pero 
+tampoco se buscaba realizar algo imposible de derrotar.
+
+\section*{{\LARGE{}Concluciones}}
+Prolog es un excelente lenguaje para el desarrollo de IA. //
+Una IA no siempre se ve envuelta con machine learning. //
+Prolog es un lenguaje que puede parecer rigido, pero si se le da un buen uso termina siendo todo lo contrario.
+Python es un excelente lenguaje para realizar ligas con prolog, hay abundancia de recursos para hacerlo.
+Sin duda alguna, una IA tiene una gran ventaja sobre una persona gracias a la cantidad de datos que puede procesar en un instante.
+\cite{aggregate_prolog_2020} \cite{numlist_prolog_2020} \cite{Mungall_2017} \cite{unknown_2010} \cite{Oakley_2015}
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
