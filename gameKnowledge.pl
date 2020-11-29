@@ -2,20 +2,13 @@
 :-discontiguous rule/3.
 :- discontiguous rule/4.
 
-color(red, X):-
-	X is 7.
-color(orange, X):-
-        X is 6.
-color(yellow, X):-
-        X is 5.
-color(green, X):-
-        X is 4.
-color(blue, X):-
-        X is 3.
-color(indigo, X):-
-        X is 2.
-color(violet, X):-
-        X is 1.
+color(red, 7).
+color(orange, 6).
+color(yellow, 5).
+color(green, 4).
+color(blue, 3).
+color(indigo, 2).
+color(violet, 1).
 
 colorRule(7, 'highestRule').
 colorRule(6, 'sameNumberRule').

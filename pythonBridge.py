@@ -5,6 +5,7 @@ Created on Wed Oct 21 10:15:19 2020
 """
 from pyswip import *
 from tkinter import ttk
+
 from tkinter import Tk
 from tkinter import Button
 from tkinter import Label
@@ -30,16 +31,40 @@ RULES = ['below4Rule','run','diferentColor','pairRule','sameColorRule','sameNumb
 prolog = Prolog()
 prolog.consult(PATH)
 players = []
-currentRule = RULES[6]
+currentRule = [RULES[6]]
 currentRuleImg = []
 playerTurn = []
+checkBox = []
+maxScore = []
+
+def restartGlobals():
+    prolog.consult(PATH)
+    players.clear()
+    currentRule.clear()
+    currentRule.append(RULES[6])
+    currentRuleImg.clear()
+    playerTurn.clear()
+    checkBox.clear()
+    maxScore.clear()
+
 #gets the current max score of the game
-def getMaxScore():
+def getMaxScore(pPlayerIndex):
     maxScore = 0
+    cont = 0
     for player in players:
-        if(player.out == False):
+        if(player.out == False and pPlayerIndex != cont):
             maxScore = max(maxScore, player.score)
+        cont += 1
     return maxScore
+
+def checkWin(pGameWindow):
+    cont = 0
+    for player in players:
+        if(player.out == True):
+            cont += 1
+    if (cont == len(players ) - 1):
+        messagebox.showinfo('Ganó c:')
+        pGameWindow.destroy()
 
 #choose the player on the left of the player with max score to begin the game
 def chooseFirstPlayer():
@@ -53,13 +78,6 @@ def chooseFirstPlayer():
             index = tempIndex
         tempIndex += 1
     return index + 1
-        
-def prologQuery():
-    res = prolog.query('like_fried_chicken(basten)')
-    if(bool(list(res))): 
-        print('yes')
-    else:
-        print('no')
 
 """
 executes a move
@@ -68,36 +86,62 @@ executes a move
 @pCardIndex index of the card choosed by the player
 """
 def executeMovement(pPlayerNumber, pCardIndex, pGameWindow, pIsPlayer):
+    if(pIsPlayer):
+        players[0].btns[pCardIndex].config(state="disabled")
+        if(checkBox[0].instate(['selected'])):
+            Rule = Variable()
+            Color = Variable()
+            color = Functor('getColor', 2)
+            q = Query(color(players[0].deck[pCardIndex], Color))
+            while q.nextSolution():
+                Color = int(Color.value) 
+            q.closeQuery()
+            rule = Functor('colorRule', 2)
+            q = Query(rule(Color, Rule))
+            while q.nextSolution():
+                Rule = str(Rule.value)
+            q.closeQuery()
+            updateRule(Rule, pGameWindow)
+            playGame(pGameWindow)
+            return
     game = Functor('game', 7)
     Score = Variable()
     NewDeck = Variable()
     NewDeckPlayed = Variable()
-    q = Query(game(currentRule, players[pPlayerNumber].deck, pCardIndex, players[pPlayerNumber].playedCards, Score, NewDeck, NewDeckPlayed))
+    q = Query(game(currentRule[0], players[pPlayerNumber].deck, pCardIndex, players[pPlayerNumber].playedCards, Score, NewDeck, NewDeckPlayed))
     while q.nextSolution():
         if(pPlayerNumber != 0):
             players[pPlayerNumber].deck = list(NewDeck.value)
         players[pPlayerNumber].score = Score.value
         players[pPlayerNumber].playedCards = list(NewDeckPlayed.value)
     q.closeQuery()
+    if(pPlayerNumber == 0):
+        if(players[pPlayerNumber].score < getMaxScore(0)):
+            messagebox.showinfo('Perdió :c')
+            pGameWindow.destroy()
+        else:
+            playGame(pGameWindow)
+    checkWin(pGameWindow)
     placePlayedCard(pPlayerNumber, pGameWindow)
-    if(pIsPlayer):
-        players[0].btns[pCardIndex].config(state="disabled")
-        playGame(pGameWindow)
+    scoreLbl = Label(pGameWindow, text = 'El jugador '+str(pPlayerNumber % len(players))+'\n va ganando con \n un Score de: '+str(players[pPlayerNumber].score))
+    scoreLbl.grid(row = 0, column = 0)
+    maxScore.append(scoreLbl)
 
 def updateRule(pRule, pGameWindow):
-    currentRule = pRule
-    index = RULES.index(currentRule)
+    currentRule[0] = pRule
+    index = RULES.index(currentRule[0]) + 1
     color = Functor('color',2)
     Color = Variable()
     q = Query(color(Color, index))
     while q.nextSolution():
         Color = str(Color.value)
+    q.closeQuery()
     updateRuleImage(Color)
-    Label(gameWindow, text = "", image = currentRuleImg[-1]).grid(row = 4, column = 4)
+    Label(pGameWindow, text = "", image = currentRuleImg[-1]).grid(row = 4, column = 4)
 
 def updateRuleImage(pColorName):
     background = Image.open('sources/' + pColorName + '.png', 'r')
-    backGroundsize = 128,128
+    backGroundsize = 64,64
     background.thumbnail(backGroundsize, Image.ANTIALIAS)
     background.save('currentRule.png')
     currentRuleImg.append(PhotoImage(file = r'currentRule.png'))
@@ -110,26 +154,29 @@ def IAMove(pPlayerNumber, pGameWindow):
     nextMove = Functor('nextMove', 7)
     CardIndex = Variable()
     NewRule = Variable()
-    maxScore = getMaxScore()
-    q = Query(nextMove(currentRule, RULES, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
+    maxScore = getMaxScore(pPlayerNumber)
+    q = Query(nextMove(currentRule[0], RULES, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
     while q.nextSolution():
-        CardIndex = int(CardIndex.value)
-        NewRule = str(NewRule.value)
+        if(isinstance(CardIndex, int) == False):
+            CardIndex = int(CardIndex.value)
+        if(isinstance(NewRule, str) == False):
+            NewRule = str(NewRule.value)
     q.closeQuery()
     if(CardIndex == -1):
         messagebox.showinfo('El jugador'+str(pPlayerNumber % len(players))+' ha perdido :(')
         deletePlayer(pPlayerNumber % len(players))
+        checkWin(pGameWindow)
     else:
-        if(currentRule != NewRule and isinstance(NewRule, str)):
+        if(currentRule[0] != NewRule and isinstance(NewRule, str)):
             messagebox.showinfo('El jugador'+str(pPlayerNumber % len(players))+' ha cambiado la regla actual')
             updateRule(NewRule, pGameWindow)
-        executeMovement(pPlayerNumber, CardIndex, pGameWindow, False)
+        else:
+            executeMovement(pPlayerNumber, CardIndex, pGameWindow, False)
 
 def initGame(pPlayerQuantity):
     Decks = Variable()
     generateDeck = Functor('generateDeck', 2)
     rule = Functor('rule', 3)
-    #rule(highestRule, List, Score)
     q = Query(generateDeck(pPlayerQuantity, Decks))
     while q.nextSolution(): 
         Decks = (list(Decks.value))
@@ -139,7 +186,7 @@ def initGame(pPlayerQuantity):
         player.deck = item[:7]
         player.playedCards.append(item[-1])
         Score = Variable()
-        q = Query(rule(currentRule, player.playedCards, Score))
+        q = Query(rule(currentRule[0], player.playedCards, Score))
         while q.nextSolution(): 
             player.score = int(Score.value)
         q.closeQuery()
@@ -148,20 +195,21 @@ def initGame(pPlayerQuantity):
 
 def playGame(pGameWindow):
     for i in range(len(players)):
-        playerTurn[0] += 1
         playerTurn[0] %= (len(players))
-        if(playerTurn[0] % len(players) == 0):
+        if(playerTurn[0] == 0):
+            playerTurn[0] += 1
             break
         if(players[playerTurn[0]].out == False):
             IAMove(playerTurn[0], pGameWindow)
+        playerTurn[0] += 1
 
 def generateCardImage(pBackground, pNumber):
-    numberSize = 32, 32
+    numberSize = 16, 16
     number = Image.open('sources/' + pNumber + '.png', 'r')
     number.thumbnail(numberSize, Image.ANTIALIAS)
     numberWidth, numberHeight = number.size
     background = Image.open('sources/' + pBackground + '.png', 'r')
-    backGroundsize = 128,128
+    backGroundsize = 64,64
     background.thumbnail(backGroundsize, Image.ANTIALIAS)
     bgWidth, bgHeight = background.size
     offset = ((bgWidth - numberWidth) // 2, (bgHeight - numberHeight) // 2)
@@ -189,6 +237,8 @@ def gameWindow(pMainWindow, pPlayerQuantity):
     pMainWindow.destroy()
     initGame(int(pPlayerQuantity))
     gameWindow = Tk()
+    checkBox.append(ttk.Checkbutton(gameWindow, text="CambiarRegla"))
+    checkBox[0].grid(row = 0, column = 10)
     generatePlayerCards(gameWindow)
     updateRuleImage('red')
     Label(gameWindow, image = currentRuleImg[-1]).grid(row = 4, column = 4)
@@ -232,8 +282,6 @@ def placePlayedCard(pPlayerIndex, pGameWindow):
             playerRow = len(players[pPlayerIndex].playedCards) + 1
             playerColumn = 0
     lbl = Label(pGameWindow, text = str(pPlayerIndex), image = players[pPlayerIndex].cardImages[-1])
-    lbl2 = Label(pGameWindow, text = "Score")
-    lbl2.grid(row = 0, column = 0)
     lbl.grid(row = playerRow, column = playerColumn, columnspan = 1)
 
 def generatePlayerCards(pGameWindow):
