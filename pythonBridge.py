@@ -37,16 +37,6 @@ playerTurn = []
 checkBox = []
 maxScore = []
 
-def restartGlobals():
-    prolog.consult(PATH)
-    players.clear()
-    currentRule.clear()
-    currentRule.append(RULES[6])
-    currentRuleImg.clear()
-    playerTurn.clear()
-    checkBox.clear()
-    maxScore.clear()
-
 #gets the current max score of the game
 def getMaxScore(pPlayerIndex):
     maxScore = 0
@@ -79,6 +69,30 @@ def chooseFirstPlayer():
         tempIndex += 1
     return index + 1
 
+def checkPlayerStatus():
+    if(players[0].score < getMaxScore(0)):
+        messagebox.showinfo('Perdió :c')
+        pGameWindow.destroy()
+    else:
+        playGame(pGameWindow)
+
+def changePlayerRule(pCardIndex, pGameWindow):
+    Rule = Variable()
+    Color = Variable()
+    color = Functor('getColor', 2)
+    q = Query(color(players[0].deck[pCardIndex], Color))
+    while q.nextSolution():
+        Color = int(Color.value) 
+    q.closeQuery()
+    rule = Functor('colorRule', 2)
+    q = Query(rule(Color, Rule))
+    while q.nextSolution():
+        Rule = str(Rule.value)
+    q.closeQuery()
+    updateRule(Rule, pGameWindow)
+    checkPlayerStatus()
+    playGame(pGameWindow)
+
 """
 executes a move
 @pCurrentRule current rule
@@ -89,20 +103,7 @@ def executeMovement(pPlayerNumber, pCardIndex, pGameWindow, pIsPlayer):
     if(pIsPlayer):
         players[0].btns[pCardIndex].config(state="disabled")
         if(checkBox[0].instate(['selected'])):
-            Rule = Variable()
-            Color = Variable()
-            color = Functor('getColor', 2)
-            q = Query(color(players[0].deck[pCardIndex], Color))
-            while q.nextSolution():
-                Color = int(Color.value) 
-            q.closeQuery()
-            rule = Functor('colorRule', 2)
-            q = Query(rule(Color, Rule))
-            while q.nextSolution():
-                Rule = str(Rule.value)
-            q.closeQuery()
-            updateRule(Rule, pGameWindow)
-            playGame(pGameWindow)
+            changePlayerRule(pCardIndex, pGameWindow)
             return
     game = Functor('game', 7)
     Score = Variable()
@@ -110,24 +111,35 @@ def executeMovement(pPlayerNumber, pCardIndex, pGameWindow, pIsPlayer):
     NewDeckPlayed = Variable()
     q = Query(game(currentRule[0], players[pPlayerNumber].deck, pCardIndex, players[pPlayerNumber].playedCards, Score, NewDeck, NewDeckPlayed))
     while q.nextSolution():
-        if(pPlayerNumber != 0):
-            players[pPlayerNumber].deck = list(NewDeck.value)
         players[pPlayerNumber].score = Score.value
         players[pPlayerNumber].playedCards = list(NewDeckPlayed.value)
-    q.closeQuery()
-    if(pPlayerNumber == 0):
-        if(players[pPlayerNumber].score < getMaxScore(0)):
-            messagebox.showinfo('Perdió :c')
-            pGameWindow.destroy()
+        if(pPlayerNumber != 0):
+            players[pPlayerNumber].deck = list(NewDeck.value)
         else:
-            playGame(pGameWindow)
-    checkWin(pGameWindow)
+
+    q.closeQuery()
     placePlayedCard(pPlayerNumber, pGameWindow)
     scoreLbl = Label(pGameWindow, text = 'El jugador '+str(pPlayerNumber % len(players))+'\n va ganando con \n un Score de: '+str(players[pPlayerNumber].score))
     scoreLbl.grid(row = 0, column = 0)
     maxScore.append(scoreLbl)
 
+def updateScores(pRule):
+    for player in players:
+        Score = Variable()
+        rule = Functor('rule', 3)
+        q = Query(rule(pRule, player.playedCards, Score))
+        while q.nextSolution(): 
+            player.score = int(Score.value)
+
+def getPlayersCards(pIndex):
+    cont = 0
+    cards = []
+    for player in players:
+        if cont != pIndex:
+            cards.append(player.playedCards)
+        cont += 1
 def updateRule(pRule, pGameWindow):
+    updateScores(pRule)
     currentRule[0] = pRule
     index = RULES.index(currentRule[0]) + 1
     color = Functor('color',2)
@@ -155,7 +167,7 @@ def IAMove(pPlayerNumber, pGameWindow):
     CardIndex = Variable()
     NewRule = Variable()
     maxScore = getMaxScore(pPlayerNumber)
-    q = Query(nextMove(currentRule[0], RULES, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
+    q = Query(nextMove(currentRule[0], getPlayersCards(pPlayerNumber), players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
     while q.nextSolution():
         if(isinstance(CardIndex, int) == False):
             CardIndex = int(CardIndex.value)
