@@ -1,0 +1,49 @@
+ @misc{aggregate_prolog_2020, 
+ title={Aggregate/3},
+ url={https://www.swi-prolog.org/pldoc/man?predicate=aggregate/3}, 
+ publisher={Swi Prolog}, 
+ author={Swi, Prolog}, 
+ year={2020}, 
+ month={Jul}
+ } 
+ 
+ @misc{numlist_prolog_2020, 
+ title={Numlist/3},
+ url={https://www.swi-prolog.org/pldoc/man?predicate=numlist/3}, 
+ publisher={Swi Prolog}, 
+ author={Swi, Prolog}, 
+ year={2020}, 
+ month={Jul}
+ } 
+ 
+ @misc{Mungall_2017, 
+ title={Find the element with the max number of occurrences Prolog},
+ url={https://stackoverflow.com/questions/46133566/prolog-find-the-element-with-the-max-number-of-occurrences}, 
+ publisher={StackOverflow}, 
+ author={Chris, Mungall}, 
+ year={2017}, 
+ month={Sep}
+ } 
+ 
+ @misc{unknown_2010, 
+ title={Create a compound image Python},
+ url={https://stackoverflow.com/questions/2563822/how-do-you-composite-an-image-onto-another-image-with-pil-in-python}, 
+ publisher={StackOverflow}, 
+ author={}, 
+ year={2010}, 
+ month={Aprl}
+ } 
+
+ @misc{Oakley_2015, 
+ title={Buttons and lambda Python},
+ url={https://stackoverflow.com/questions/31166542/how-to-get-grid-information-from-pressed-button-in-tkinter}, 
+ publisher={StackOverflow}, 
+ author={Bryan, Oakley}, 
+ year={2015}, 
+ month={Jul}
+ } 
+ 
+ 
+
+
+ 
