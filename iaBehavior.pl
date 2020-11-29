@@ -25,8 +25,7 @@ nextMove(ActualRule, PlayersPlayedCards, PlayerCards, GameCards, MaxScore, CardI
         (
         MaxRuleScore > NewRulePlayersScore ->
         nth0(CardIndex, RuleScoreList, MaxRuleScore),
-        nth0(MaxRuleScore, RuleScoreList, NewRuleIndex), 
-        nth0(NewRuleIndex, RulesList, NewRule)
+        newRule is NewRulePlayersScore
         ;
         CardIndex is -1,
         NewRule = ActualRule
