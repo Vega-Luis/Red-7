@@ -88,7 +88,7 @@ def changePlayerRule(pCardIndex, pGameWindow):
         Rule = str(Rule.value)
     q.closeQuery()
     updateRule(Rule, pGameWindow)
-    if(players[0].score < getMaxScore(0)):
+    if(players[0].score < getMaxScore(0) or not(checkDraws(0))):
         messagebox.showinfo('Perdió :c')
         pGameWindow.destroy()
     else:
@@ -123,7 +123,7 @@ def executeMovement(pPlayerNumber, pCardIndex, pGameWindow, pIsPlayer):
     scoreLbl.grid(row = 0, column = 0)
     maxScore.append(scoreLbl)
     if(pPlayerNumber == 0):
-        if(players[0].score < getMaxScore(0)):
+        if(players[0].score < getMaxScore(0) or not(checkDraws(0))):
             messagebox.showinfo('Perdió :c')
             pGameWindow.destroy()
         else:
@@ -186,7 +186,7 @@ def IAMove(pPlayerNumber, pGameWindow):
             NewRule = str(NewRule.value)
     q.closeQuery()
     print(NewRule)
-    if(CardIndex == -1):
+    if(CardIndex == -1 or not(checkDraws(pPlayerNumber))):
         messagebox.showinfo('El jugador'+str(pPlayerNumber % len(players))+' ha perdido :(')
         deletePlayer(pPlayerNumber % len(players))
         checkWin(pGameWindow)
@@ -196,6 +196,31 @@ def IAMove(pPlayerNumber, pGameWindow):
             updateRule(NewRule, pGameWindow)
         else:
             executeMovement(pPlayerNumber, CardIndex, pGameWindow, False)
+
+"""
+Checks if theres a tie, return False if the current player wins
+"""
+def checkDraws(pPlayerNumber):
+    score = getMaxScore(5)
+    maxIndex = 0
+    newPlayerIndex = 0
+    tied = []
+    cont = 0
+    for player in players:
+        if(player.score == score):
+            tied.append(player.playedCards)
+            if(cont == pPlayerNumber):
+                newPlayerIndex = len(tied) - 1
+        cont += 1
+    if(len(tied) > 1):
+        tieBreaker = Functor('tieBreaker', 2)
+        Winner = Variable()
+        q = Query(tieBreaker(tied, Winner))
+        while q.nextSolution():
+            maxIndex = int(Winner.value)
+        q.closeQuery()
+        return maxIndex == newPlayerIndex
+    return True
 
 def initGame(pPlayerQuantity):
     Decks = Variable()
