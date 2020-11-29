@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.9.24)  28 NOV 2020 22:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.9.24)  28 NOV 2020 23:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -145,6 +145,11 @@ s
 \f@nch@O@olf=\skip57
 \f@nch@O@orf=\skip58
 )
+(/usr/share/texlive/texmf-dist/tex/latex/cite/cite.sty
+LaTeX Info: Redefining \cite on input line 302.
+LaTeX Info: Redefining \nocite on input line 332.
+Package: cite 2015/02/27  v 5.5
+)
 (/usr/share/texlive/texmf-dist/tex/latex/endnotes/endnotes.sty
 Package: endnotes 2020-01-02 endnotes package
 \c@endnote=\count182
@@ -246,58 +251,294 @@ LaTeX Info: Redefining \% on input line 8.
 )
 \openout1 = `Red-7_documentation.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
 
 -- Lines per column: 61 (exact).
 \c@lstlisting=\count195
-LaTeX Info: Redefining \. on input line 37.
-LaTeX Info: Redefining \% on input line 37.
+LaTeX Info: Redefining \. on input line 36.
+LaTeX Info: Redefining \% on input line 36.
 [0
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 74
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 72
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
+)
+
+LaTeX Warning: Citation `aggregate_prolog_2020' on page 1 undefined on input li
+ne 111.
+
+
+LaTeX Warning: Citation `numlist_prolog_2020' on page 1 undefined on input line
+ 112.
+
+
+LaTeX Warning: Citation `Mungall_2017' on page 1 undefined on input line 113.
+
+
+LaTeX Warning: Citation `unknown_2010' on page 1 undefined on input line 114.
+
+
+LaTeX Warning: Citation `Oakley_2015' on page 1 undefined on input line 115.
+
+(./Red-7_documentation.bbl
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1  @misc{aggregate_
+                     prolog_2020,
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+LaTeX Font Info:    Calculating math sizes for size <9.53561> on input line 1.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9.53561> on input line 1.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6.6749> on input line 1.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <4.7678> on input line 1.
+! Extra }, or forgotten $.
+l.8  }
+      
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.9 
+    
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+
+Overfull \hbox (108.2644pt too wide) in paragraph at lines 1--9
+[]\OML/cmm/m/it/10 ; publisher \OT1/cmr/m/n/10 =
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.10  @misc{numlist_
+                    prolog_2020,
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Extra }, or forgotten $.
+l.17  }
+       
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.18 
+     
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+
+Overfull \hbox (100.0256pt too wide) in paragraph at lines 10--18
+[]\OML/cmm/m/it/10 ; publisher \OT1/cmr/m/n/10 =
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.19  @misc{Mungall_
+                    2017,
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Extra }, or forgotten $.
+l.26  }
+       
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.27 
+     
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--27
+[]\T1/ppl/m/n/9.53561 @miscMungall$[]\OT1/cmr/m/n/10 017\OML/cmm/m/it/10 ; titl
+e \OT1/cmr/m/n/10 =
+ []
+
+
+Overfull \hbox (30.65086pt too wide) in paragraph at lines 19--27
+[]\OML/cmm/m/it/10 ; url \OT1/cmr/m/n/10 =
+ []
+
+
+Overfull \hbox (387.51184pt too wide) in paragraph at lines 19--27
+[]\OML/cmm/m/it/10 ; publisher \OT1/cmr/m/n/10 =
+ []
+
+
+Underfull \hbox (badness 4859) in paragraph at lines 19--27
+[]\OML/cmm/m/it/10 ; author \OT1/cmr/m/n/10 = []\OML/cmm/m/it/10 ; year \OT1/cm
+r/m/n/10 =
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.28  @misc{unknown_
+                    2010,
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Extra }, or forgotten $.
+l.35  }
+       
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.36 
+     
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 28--36
+[]\T1/ppl/m/n/9.53561 @miscunknown$[]\OT1/cmr/m/n/10 010\OML/cmm/m/it/10 ; titl
+e \OT1/cmr/m/n/10 =
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 28--36
+[]\OML/cmm/m/it/10 ; url \OT1/cmr/m/n/10 =
+ []
+
+
+Overfull \hbox (449.06514pt too wide) in paragraph at lines 28--36
+[]\OML/cmm/m/it/10 ; publisher \OT1/cmr/m/n/10 =
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.37  @misc{Oakley_
+                   2015,
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Extra }, or forgotten $.
+l.44  }
+       
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.45 
+     
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 37--45
+[]\T1/ppl/m/n/9.53561 @miscOakley$[]\OT1/cmr/m/n/10 015\OML/cmm/m/it/10 ; title
+ \OT1/cmr/m/n/10 =
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 37--45
+[]\OML/cmm/m/it/10 ; url \OT1/cmr/m/n/10 =
+ []
+
+
+Overfull \hbox (379.99638pt too wide) in paragraph at lines 37--45
+[]\OML/cmm/m/it/10 ; publisher \OT1/cmr/m/n/10 =
+ []
+
+
+Underfull \hbox (badness 7415) in paragraph at lines 37--45
+[]\OML/cmm/m/it/10 ; author \OT1/cmr/m/n/10 = []\OML/cmm/m/it/10 ; year \OT1/cm
+r/m/n/10 =
+ []
+
 ) [1
 
-
-]
-(./Red-7_documentation.aux
+] (./Red-7_documentation.aux
 LaTeX Info: Redefining \. on input line 8.
 LaTeX Info: Redefining \% on input line 8.
-) ) 
+)
+
+LaTeX Warning: There were undefined references.
+
+ )
+(\end occurred inside a group at level 5)
+
+### simple group (level 5) entered at line 37 ({)
+### simple group (level 4) entered at line 28 ({)
+### simple group (level 3) entered at line 19 ({)
+### simple group (level 2) entered at line 10 ({)
+### simple group (level 1) entered at line 1 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 4193 strings out of 481239
- 64745 string characters out of 5920377
- 503907 words of memory out of 5000000
- 19448 multiletter control sequences out of 15000+600000
- 606938 words of font info for 119 fonts, out of 8000000 for 9000
+ 4305 strings out of 481239
+ 66308 string characters out of 5920377
+ 510694 words of memory out of 5000000
+ 19553 multiletter control sequences out of 15000+600000
+ 607547 words of font info for 120 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  40i,10n,69p,238b,361s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texli
-ve/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/urw/palatino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/urw/palatino/uplr8a.pfb>
-Output written on Red-7_documentation.pdf (2 pages, 45328 bytes).
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/pal
+atino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a
+.pfb>
+Output written on Red-7_documentation.pdf (2 pages, 99187 bytes).
 PDF statistics:
- 24 PDF objects out of 1000 (max. 8388607)
- 16 compressed objects within 1 object stream
+ 44 PDF objects out of 1000 (max. 8388607)
+ 31 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
