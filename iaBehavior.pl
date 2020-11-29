@@ -11,11 +11,11 @@ nextMove(ActualRule, PlayersPlayedCards, PlayerCards, GameCards, MaxScore, CardI
     max_list(ScoreList, NewMax),
     getRuleScores(RulesList, GameCards, [], RuleScoreList),
     max_list(RuleScoreList, MaxRuleScore),
-    nth0(MaxRuleScore, RuleScoreList, NewRuleIndex), 
+    nth0(NewRuleIndex, RuleScoreList, MaxRuleScore), 
     nth0(NewRuleIndex, RulesList, NewRuleChange),
     %ver si el cambio de regla es conveniente
     %@PlayerMaxScore lista que contiene la lista de maximos scores por jugador
-    getPlayersPlayedCardsMaxScore([], NewRuleChange, PlayerMaxScore, PlayerMaxScore),
+    getPlayersPlayedCardsMaxScore(PlayersPlayedCards, NewRuleChange, [], PlayerMaxScore),
     max_list(PlayerMaxScore, NewRulePlayersScore),
     (
         (NewMax >= MaxRuleScore, NewMax >= MaxScore) ->
@@ -25,7 +25,8 @@ nextMove(ActualRule, PlayersPlayedCards, PlayerCards, GameCards, MaxScore, CardI
         (
         MaxRuleScore > NewRulePlayersScore ->
         nth0(CardIndex, RuleScoreList, MaxRuleScore),
-        newRule is NewRulePlayersScore
+        NewRule = NewRuleChange,
+        !
         ;
         CardIndex is -1,
         NewRule = ActualRule
@@ -52,9 +53,39 @@ getScores(ActualRule, [PHead|PTail], Move, AuxScoreList, ScoreList):-
 getMoveScore(ActualRule, Move, Score):-
     rule(ActualRule, Move, Score).
 
-getPlayersPlayedCardsMaxScore([], ActtualRule, PlayerMaxScore, PlayerMaxScore).
+getPlayersPlayedCardsMaxScore([], ActualRule, PlayerMaxScore, PlayerMaxScore).
 
-getPlayersPlayedCardsMaxScore([Head|Tail], ActualRule, TempMaxScore, PlayerScore):-
+getPlayersPlayedCardsMaxScore([Head|Tail], ActualRule, TempMaxScore, PlayerMaxScore):-
+    writeln(ActualRule),
     getMoveScore(ActualRule, Head, Score),
-     append(TempMaxScore, [Score], NewList),
-    getPlayersPlayedCardsMaxScore(Tail, ActualRule, NewList, PlayerScore).
+    append(TempMaxScore, [Score], NewList),
+    getPlayersPlayedCardsMaxScore(Tail, ActualRule, NewList, PlayerMaxScore).
+
+tieBreaker(PlayerCards, WinerIndex):-
+    tieByHigherCard(PlayerCards, [], HigherCardList),
+    tieByColor(PlayerCards, [], HigherColorList),
+    write("antesmax"),
+    max_list(HigherCardList, HighCard),
+    max_list(HigherColorList, HighColor),
+    (
+        HighCard > HighColor ->
+        nth0(WinerIndex, HigherCardList, HighCard)
+    ;
+        nth0(WinerIndex, HigherColorList, HighColor)
+    ).
+
+
+tieByHigherCard([], HigherList, HigherList).
+
+tieByHigherCard([Head|Tail], AuxList, HigherList):-
+    max_list(Head, Higher),
+    append(AuxList, [Higher], NewList),
+    tieByHigherCard(Tail, NewList, HigherList).
+    
+tieByColor([], HigherList, HigherList).
+
+tieByColor([Head|Tail], AuxList, HigherList):-
+    cardsToColors(Head, [], ColorList),
+    max_list(Head, Higher),
+    append(AuxList, [Higher], NewList),
+    tieByColor(Tail, NewList, HigherList).
