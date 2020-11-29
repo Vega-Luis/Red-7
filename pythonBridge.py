@@ -3,9 +3,10 @@ Created on Wed Oct 21 10:15:19 2020
 
 @author: marcos
 """
+import math
+
 from pyswip import *
 from tkinter import ttk
-
 from tkinter import Tk
 from tkinter import Button
 from tkinter import Label
@@ -68,14 +69,7 @@ def chooseFirstPlayer():
             index = tempIndex
         tempIndex += 1
     return index + 1
-
-def checkPlayerStatus():
-    if(players[0].score < getMaxScore(0)):
-        messagebox.showinfo('Perdió :c')
-        pGameWindow.destroy()
-    else:
-        playGame(pGameWindow)
-
+        
 def changePlayerRule(pCardIndex, pGameWindow):
     Rule = Variable()
     Color = Variable()
@@ -90,8 +84,11 @@ def changePlayerRule(pCardIndex, pGameWindow):
         Rule = str(Rule.value)
     q.closeQuery()
     updateRule(Rule, pGameWindow)
-    checkPlayerStatus()
-    playGame(pGameWindow)
+    if(players[0].score < getMaxScore(0)):
+        messagebox.showinfo('Perdió :c')
+        pGameWindow.destroy()
+    else:
+        playGame(pGameWindow)
 
 """
 executes a move
@@ -114,14 +111,19 @@ def executeMovement(pPlayerNumber, pCardIndex, pGameWindow, pIsPlayer):
         players[pPlayerNumber].score = Score.value
         players[pPlayerNumber].playedCards = list(NewDeckPlayed.value)
         if(pPlayerNumber != 0):
-            players[pPlayerNumber].deck = list(NewDeck.value)
-        else:
-
+            players[pPlayerNumber].deck = list(NewDeck.value)     
     q.closeQuery()
     placePlayedCard(pPlayerNumber, pGameWindow)
     scoreLbl = Label(pGameWindow, text = 'El jugador '+str(pPlayerNumber % len(players))+'\n va ganando con \n un Score de: '+str(players[pPlayerNumber].score))
+    scoreLbl.lift
     scoreLbl.grid(row = 0, column = 0)
     maxScore.append(scoreLbl)
+    if(pPlayerNumber == 0):
+        if(players[0].score < getMaxScore(0)):
+            messagebox.showinfo('Perdió :c')
+            pGameWindow.destroy()
+        else:
+            playGame(pGameWindow)
 
 def updateScores(pRule):
     for player in players:
@@ -130,6 +132,7 @@ def updateScores(pRule):
         q = Query(rule(pRule, player.playedCards, Score))
         while q.nextSolution(): 
             player.score = int(Score.value)
+        q.closeQuery()
 
 def getPlayersCards(pIndex):
     cont = 0
@@ -138,6 +141,8 @@ def getPlayersCards(pIndex):
         if cont != pIndex:
             cards.append(player.playedCards)
         cont += 1
+    return cards
+
 def updateRule(pRule, pGameWindow):
     updateScores(pRule)
     currentRule[0] = pRule
@@ -167,10 +172,12 @@ def IAMove(pPlayerNumber, pGameWindow):
     CardIndex = Variable()
     NewRule = Variable()
     maxScore = getMaxScore(pPlayerNumber)
-    q = Query(nextMove(currentRule[0], getPlayersCards(pPlayerNumber), players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
+    playersCards = getPlayersCards(pPlayerNumber)
+    q = Query(nextMove(currentRule[0], playersCards, players[pPlayerNumber].deck, players[pPlayerNumber].playedCards, maxScore, CardIndex, NewRule))
     while q.nextSolution():
         if(isinstance(CardIndex, int) == False):
             CardIndex = int(CardIndex.value)
+            print('CardIndex:'+str(CardIndex))
         if(isinstance(NewRule, str) == False):
             NewRule = str(NewRule.value)
     q.closeQuery()
